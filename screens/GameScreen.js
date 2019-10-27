@@ -39,9 +39,9 @@ const GameScreen = props => {
             ]);
             return;
         } else if (direction === 'greater') {
-            currentLow.current = currentGuess;
+            currentLow.current = currentGuess + 1;
         } else {
-            currentHigh.current = currentGuess;
+            currentHigh.current = currentGuess - 1;
         }
         setCurrentGuess(generateRandomBetween(currentLow.current, currentHigh.current))
     }
