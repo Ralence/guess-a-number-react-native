@@ -22,9 +22,8 @@ const StartGameScreen = props => {
         setEnteredValue(inputText.replace(/[^0-9]/g, ''));
     }
     const resetHandler = () => {
-        console.log('Got here')
-        // setEnteredValue('');
-        // setConfirmed(false);
+        setEnteredValue('');
+        setConfirmed(false);
     }
     const confirmInputHandler = () => {
         const chosenNumber = parseInt(enteredValue);
@@ -38,6 +37,7 @@ const StartGameScreen = props => {
         setConfirmed(true);
         setSelectedNumber(chosenNumber);
         setEnteredValue('')
+        Keyboard.dismiss();
     }
 
     let confirmedOutput;
@@ -45,7 +45,8 @@ const StartGameScreen = props => {
         confirmedOutput = (
             <Card style={styles.summary}>
                 <Text>You Selected</Text>
-                <NumberContainer>{chosenNumber}</NumberContainer>
+                <NumberContainer>{selectedNumber}</NumberContainer>
+                <Button title="start game" />
             </Card>)
     }
     return (
@@ -114,7 +115,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5
     },
     summary: {
-        marginVertical: 20
+        marginVertical: 20,
+        alignItems: 'center'
     }
 });
 
