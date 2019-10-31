@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import NumberContainer from '../components/NumberContainer';
@@ -21,15 +21,15 @@ const generateRandomBetween = (min, max, exclude) => {
 };
 
 const GameScreen = props => {
-    const [currentGuess, setCurrentGuess] = useState(generateRandomBetween(1, 100, props.userChoice));
-    const [round, setRound] = useState(1);
+    const initialGuess = generateRandomBetween(1, 100, props.userChoice)
+    const [currentGuess, setCurrentGuess] = useState(initialGuess);
+    const [pastGuesses, setPastGuesses] = useState([initialGuess]);
     const currentLow = useRef(1);
     const currentHigh = useRef(100);
 
     useEffect(() => {
-        setRound(prevState => prevState + 1)
         if (currentGuess === props.userChoice) {
-            props.onGameOver(round)
+            props.onGameOver(pastGuesses.length)
         }
     }, [currentGuess])
 
@@ -47,7 +47,10 @@ const GameScreen = props => {
         } else {
             currentHigh.current = currentGuess - 1;
         }
-        setCurrentGuess(generateRandomBetween(currentLow.current, currentHigh.current))
+        const nextNumber = generateRandomBetween(currentLow.current, currentHigh.current)
+        setCurrentGuess(nextNumber);
+
+        setPastGuesses(prevState => [nextNumber, ...prevState]);
     }
 
     return (
@@ -62,6 +65,9 @@ const GameScreen = props => {
                     <Ionicons name='md-add' size={24} color='white' />
                 </MainButton>
             </Card>
+            <ScrollView>
+                {pastGuesses.map(item => <View key={item}><Text>{item}</Text></View>)}
+            </ScrollView>
         </View>
     );
 };
