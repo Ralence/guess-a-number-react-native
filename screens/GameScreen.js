@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Alert, ScrollView, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import NumberContainer from '../components/NumberContainer';
@@ -75,10 +75,16 @@ const GameScreen = props => {
                     <Ionicons name='md-add' size={24} color='white' />
                 </MainButton>
             </Card>
-            <View style={styles.list}>
-                <ScrollView>
+            <View style={styles.listContainer}>
+                {/* <ScrollView contentContainerStyle={styles.list}>
                     {pastGuesses.map((item, index) => renderListItem(item, pastGuesses.length - index))}
-                </ScrollView>
+                </ScrollView> */}
+                <FlatList
+                    contentContainerStyle={styles.list}
+                    data={pastGuesses.map((item, index) => ({ round: item + '', key: item + '', index }))}
+                    renderItem={({ item }) => renderListItem(item.round, pastGuesses.length - item.index)}
+
+                />
             </View>
         </View>
     );
@@ -97,9 +103,14 @@ const styles = StyleSheet.create({
         width: 300,
         maxWidth: '80%'
     },
-    list: {
+    listContainer: {
         flex: 1,
-        width: '80%'
+        width: '60%'
+    },
+    list: {
+        flexGrow: 1,
+        //alignItems: 'center',
+        //justifyContent: 'flex-end'
     },
     listItem: {
         borderColor: '#ccc',
@@ -109,6 +120,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         flexDirection: 'row',
         justifyContent: 'space-around',
+        width: '100%'
     }
 });
 
